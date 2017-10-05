@@ -28,10 +28,14 @@ namespace :bundler do
           bundle_path = fetch(:bundle_path)
           bundle_without = fetch(:bundle_without)
           bundle_gemfile = fetch(:bundle_gemfile)
+          bundle_frozen = fetch(:bundle_frozen)
+          bundle_disable_shared_gems = fetch(:bundle_disable_shared_gems)
 
           execute :bundle, :config, "--local path #{bundle_path}" if bundle_path
           execute :bundle, :config, "--local without #{bundle_without.split(' ').join(':')}" if bundle_without
           execute :bundle, :config, "--local gemfile #{bundle_gemfile}" if bundle_gemfile
+          execute :bundle, :config, "--local frozen #{bundle_frozen}" if bundle_frozen
+          execute :bundle, :config, "--local disable_shared_gems #{bundle_disable_shared_gems}" if bundle_disable_shared_gems
 
           unless test(:bundle, :check)
             options = []
@@ -82,5 +86,7 @@ namespace :load do
     set :bundle_path, -> { shared_path.join('bundle') }
     set :bundle_without, %w{development test}.join(' ')
     set :bundle_flags, '--deployment --quiet'
+    set :bundle_frozen, '1'
+    set :bundle_disable_shared_gems, true
   end
 end
