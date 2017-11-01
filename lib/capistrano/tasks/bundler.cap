@@ -65,8 +65,8 @@ namespace :bundler do
   task :clean do
     on fetch(:bundle_servers) do
       within release_path do
-        with fetch(:bundle_env_variables, {}) do
-          execute :bundle, :clean, fetch(:bundle_clean_options, "")
+        with fetch(:bundle_env_variables) do
+          execute :bundle, :clean, fetch(:bundle_clean_options)
         end
       end
     end
@@ -83,9 +83,14 @@ namespace :load do
 
     set :bundle_roles, :all
     set :bundle_servers, -> { release_roles(fetch(:bundle_roles)) }
+    set :bundle_binstubs, nil
+    set :bundle_gemfile, nil
     set :bundle_path, -> { shared_path.join('bundle') }
     set :bundle_without, %w{development test}.join(' ')
     set :bundle_flags, '--deployment --quiet'
+    set :bundle_jobs, nil
+    set :bundle_env_variables, {}
+    set :bundle_clean_options, ""
     set :bundle_frozen, '1'
     set :bundle_disable_shared_gems, true
   end
